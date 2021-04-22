@@ -6,7 +6,9 @@ import java.util.List;
 import org.sikuli.basics.Settings;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.ImagePath;
+import org.sikuli.script.Key;
 import org.sikuli.script.Match;
+import org.sikuli.script.Pattern;
 import org.sikuli.script.Region;
 import org.sikuli.script.Screen;
 import org.sikuli.script.ScreenImage;
@@ -17,21 +19,15 @@ public class PocMain {
 		ImagePath.add(System.getProperty("user.dir"));
 		Settings.OcrTextRead = true;
 		Settings.OcrTextRead = true;
+		abreMstsc();
 		abreExcel();
-		// Screen s = new Screen();
-		// s.click("imgs/1618403982125.png", 0);
-		// s.wait("imgs/1618404308070.png",100);
-		// s.click("imgs/1618403960364.png", 0);
-		// s.wait("imgs/1618404381847.png",100);
-		// s.type("TESTANDO");
-		// ScreenImage capture = s.capture();
-		// String file = capture.getFile("img", "teste.png");
-		// System.err.println(file);
+		salvaArquivoExcel();
 
 	}
 
 	public static void abreVariaveis() {
 		Screen s = new Screen();
+
 		try {
 			s.click("imgs\\1618396827304.png", 0);
 			s.wait("imgs\\1618403444950.png", 100);
@@ -58,11 +54,46 @@ public class PocMain {
 		}
 	}
 
+	public static void abreMstsc() {
+		Screen s = new Screen();
+
+		try {
+			s.click("imgs/1619086491960.png", 0);
+
+		} catch (FindFailed e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void salvaArquivoExcel() {
+		Screen s = new Screen();
+
+		try {
+			Match btnArquivo = s.wait("imgs/1619087843643.png", 1000);
+			s.click(btnArquivo);
+			Match btnSalvarComo = s.wait("imgs/1619087991212.png", 1000);
+			s.click(btnSalvarComo);
+			Match btnEsteComputador = s.wait("imgs/1619088051725.png", 1000);
+			s.doubleClick(btnEsteComputador);
+			s.wait("imgs/1619088146892.png", 5000);
+			Pattern exact = new Pattern("imgs/1619088214518.png").exact();
+			Match btnDesktop = s.wait(exact, 1000);
+			s.doubleClick(btnDesktop);
+			s.keyDown(Key.ALT);
+			s.keyDown("s");
+			s.keyUp();
+
+		} catch (FindFailed e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void abreExcel() {
 		Screen s = new Screen();
 		try {
 			s.click("imgs\\1618396827304.png", 0);
-			s.wait("imgs\\1618403444950.png", 100);
+			s.wait("imgs\\1618403444950.png", 1000);
 			s.type("exce");
 			Region menu = s.find("imgs\\1618398969847.png").below(300);
 			Match iconExcel = menu.find("imgs\\1618805516813.png");
@@ -115,9 +146,16 @@ public class PocMain {
 
 			// captureLine.getFile("imgs/linha", "l" + i);
 			// }
-
+			s.keyDown(Key.ESC);
+			s.keyUp();
 			for (String string : fontes) {
-				System.err.println(string);
+				try {
+					s.type(string);
+				} catch (Exception e) {
+					System.err.println(e);
+				}
+				s.keyDown(Key.ENTER);
+				s.keyUp();
 			}
 			// String text = listaDeFontes.text();
 			// System.err.println(text);
